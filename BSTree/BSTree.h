@@ -9,6 +9,7 @@ private:
 public:
     BSTree();
     void insert (int d);
+    int search(int value);
     std::string get_debug_string();
     std::string get_debug_stringHelper(Node *n);
     void setup();

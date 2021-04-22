@@ -17,5 +17,22 @@ int main()
     BSTree *t = new BSTree();
     t->setup();
     std::cout << t->get_debug_string() << std::endl;
+
+    std::cout << t->search(2) << std::endl;
+    std::cout << t->search(25) << std::endl;
+    std::cout << t->search(3) << std::endl;
+    std::cout << t->search(35) << std::endl;
+
+    t->insert(10);
+    t->insert(20);
+    t->insert(30);
+    t->insert(40);
+    t->insert(60);
+    t->insert(70);
+    t->insert(80);
+    t->insert(90);
+
+    std::cout << t->get_debug_string() << std::endl;
+
     return 0;
 }
