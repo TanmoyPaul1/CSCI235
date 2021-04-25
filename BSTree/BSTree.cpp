@@ -63,10 +63,154 @@ int BSTree::search(int value)
     return -1;
 }
 
-std::string BSTree::get_debug_string()
+void BSTree::deleteNode(int d) { root = deleteNode(root, d); }
+
+Node *BSTree::deleteNode(Node *n, int d)
 {
-    return (root == nullptr) ?  "" : get_debug_stringHelper(root);
+    if (n == nullptr)
+    {
+        return n;
+    }
+
+    if (n->getData() > d)
+    {
+        n->setLeft(deleteNode(n->getLeft(), d));
+    }
+    else if (n->getData() < d)
+    {
+        n->setRight(deleteNode(n->getRight(), d));
+    }
+    else
+    {
+        Node *walker = n;
+
+        if (n->getLeft() == nullptr && n->getRight() == nullptr)
+        {
+            delete n;
+            return nullptr;
+        }
+        else if (n->getRight() != nullptr)
+        {
+            walker = n->getRight();
+            Node *d = walker;
+            if (walker->getLeft() == nullptr)
+            {
+                n->setRight(walker->getRight());
+            }
+
+            while (walker->getLeft() != nullptr)
+            {
+                d = walker;
+                walker = walker->getLeft();
+            }
+            d->setLeft(nullptr);
+        }
+        else
+        {
+            walker = n->getLeft();
+            Node *d = walker;
+            if (walker->getRight() == nullptr)
+            {
+                n->setLeft(walker->getLeft());
+            }
+            
+            while (walker->getRight() != nullptr)
+            {
+                d = walker;
+                walker = walker->getRight();
+            }
+            d->setRight(nullptr);
+        }
+        n->setData(walker->getData());
+    }
+    return n;
 }
+
+
+
+int BSTree::treesum() { return treesumHelper(root); }
+
+int BSTree::treesumHelper(Node *n)
+{
+    if (n == nullptr)
+    {
+        return 0;
+    }
+
+    int left = 0, right = 0;
+    if (n->getLeft() != nullptr)
+    {
+        left = treesumHelper(n->getLeft());
+    }
+    if (n->getRight() != nullptr)
+    {
+        right = treesumHelper(n->getRight());
+    }
+
+    return left + n->getData() + right;
+}
+
+
+int BSTree::numNodes() { return numNodesHelper(root); }
+
+int BSTree::numNodesHelper(Node *n)
+{
+    if (n == nullptr)   return 0;
+
+    return numNodesHelper(n->getLeft()) + numNodesHelper(n->getRight()) + 1;
+}
+
+
+int BSTree::numLeaves() { return numLeavesHelper(root); }
+
+int BSTree::numLeavesHelper(Node *n)
+{
+    if (n == nullptr)   return 0;
+
+    if (n->getLeft() == nullptr && n->getRight() == nullptr)    return 1;
+    if (n->getRight() == nullptr)   return numLeavesHelper(n->getLeft());
+    if (n->getLeft() == nullptr)    return numLeavesHelper(n->getRight());
+
+    return numLeavesHelper(n->getLeft()) + numLeavesHelper(n->getRight());
+}
+
+
+int BSTree::nodesum(int d)
+{
+    Node *walker = root;
+    while (walker->getData() != d)
+    {
+        if (walker->getData() > d)
+        {
+            walker = walker->getLeft();
+        }
+        else
+        {
+            walker = walker->getRight();
+        }
+        if (walker == nullptr)    return 0;
+    }
+
+    if (walker == nullptr)    return 0;
+    return treesumHelper(walker);
+}
+
+
+int BSTree::height() { return heightHelper(root); }
+
+int BSTree::heightHelper(Node *n)
+{
+    if (n == nullptr)   return 0;
+
+    int left = heightHelper(n->getLeft());
+    int right = heightHelper(n->getRight());
+    
+    return (left > right) ? left + 1 : right + 1;
+}
+
+
+
+std::string BSTree::get_debug_string() { return (root == nullptr) ?  "" : get_debug_stringHelper(root); }
 
 std::string BSTree::get_debug_stringHelper(Node *n)
 {
